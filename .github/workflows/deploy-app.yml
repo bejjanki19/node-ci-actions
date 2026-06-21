@@ -2,18 +2,28 @@ name: deploy-app
 
 on:
   push:
-    branches: ["feature-deploy"]
+    branches:
+      - feature-deploy
 
 jobs:
   run-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install Dependencies
-        run: npm install
-      - name: Run Tests
+
+      - name: Install dependencies
+        run: |
+          if [ -f package.json ]; then
+            npm install
+          fi
+
+      - name: Run tests
         run: npm test
+
